@@ -23,31 +23,31 @@ lien_unique=set(lien)
 
 """ajouter préfix http://www.vins-bourgogne.fr à tous les liens"""
 
-for i in lien_unique:
-    i="https://www.vins-bourgogne.fr"+str(i)
-print (lien_unique)
+lien_corrige=[]
+prefix="https://www.vins-bourgogne.fr"
 
-
-
-
-
-"""
-
-
+lien_corrige=[prefix+i for i in lien_unique]
 
 
 with open("couleur", "w") as cl:
     cl.write("")
     cl.close()
 
-for url in lien_unique:
+for url in lien_corrige:
     requete=requests.get(url)
     page_html=requete.content
     page_BS=BeautifulSoup(page_html, "html5lib")
     couleur_text=page_BS.find_all('div', class_='portlet3')[0]
 
-    couleur1=str(couleur_text.find_all('div', class_='col-md-offset-1')[0]).split('<br/>')[1].split(" ")[1]
-    cepage1=str(couleur_text.find_all('div', class_='col-md-offset-1')[0]).split('<br/>')[1].split(" ")[-1]
+    try:
+        couleur1=str(couleur_text.find_all('div', class_='col-md-offset-1')[0]).split('<br/>')[1].split(" ")[1]
+    except:
+        print("couleur1, page na pas ce contenu")
+
+    try:
+        cepage1=str(couleur_text.find_all('div', class_='col-md-offset-1')[0]).split('<br/>')[1].split(" ")[-1]
+    except:
+        print("cepage2, page na pas ce contenu")
 
     try:
         couleur2=str(couleur_text.find_all('div', class_='col-md-offset-1')[0]).split('<br/>')[2].split(" ")[1]
@@ -77,4 +77,3 @@ for url in lien_unique:
         cl.write(cepage1+'\n')
         cl.write(couleur2 + '\n')
         cl.write(cepage2+'\n')
-"""
