@@ -28,10 +28,13 @@ prefix="https://www.vins-bourgogne.fr"
 
 lien_corrige=[prefix+i for i in lien_unique]
 
+<<<<<<< HEAD
 """
 with open("lien_corrige", "w") as lien:
     lien.write(str(lien_corrige))   """
 
+=======
+>>>>>>> 61ecce4a7b3d0450eb82733be4d6edea236df389
 
 with open("couleur", "w") as cl:
     cl.write("")
@@ -80,4 +83,8 @@ for url in lien_corrige:
         cl.write(couleur1+'\n')
         cl.write(cepage1+'\n')
         cl.write(couleur2 + '\n')
+<<<<<<< HEAD
         cl.write(cepage2+'\n')
+=======
+        cl.write(cepage2+'\n')
+>>>>>>> 61ecce4a7b3d0450eb82733be4d6edea236df389
