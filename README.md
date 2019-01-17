@@ -1,2 +1,3 @@
 # winerate
-Projet WineRate CBDATA7
+Projet WineRate CBDATA7 - 2018/2019
+SSH Added (Test)
