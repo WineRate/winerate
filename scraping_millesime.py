@@ -55,6 +55,62 @@ def collecte_tableau(nom_vignoble,couleur_vin,rang_couleur_tableau,annee_millesi
     return chaine
 
 
+def collecte_moyenne_millesime() :
+    """Scraping du tableau donnant mla tendance moyenne du millesime"""
+
+    # initialisation de l'URL à scraper
+    url = 'http://www.vin-vigne.com/millesimes/millesimes-des-vignobles.html'
+
+    # se connecter à la page et obtenir le code source
+    requete = requests.get(url)
+    page_html = requete.content
+
+    # initialisation des chaines qui contiendront toutes les données de la page web
+    chaine_donnees='Vignobles    \\    Années;2013;2012;2011;2010;2009;2008;2007;2006; \
+                    2005;2004;2003;2002;2001;2000;1999;1998;1997;1996'+'\n'
+    chaine = ""
+
+    # transformer la page HTML en beautifulSoup pour pouvoir la manipuler
+    soupe = BeautifulSoup(page_html, "html5lib")
+    
+    #Vérification des variables en entrée, on ne traite pas au delà de 4ième tableaux 
+    
+    # stocker les donnees des vins obtenues par scraping
+    data = []
+    table = soupe.find_all('table', attrs={'class': 'points'})[0]
+    table_body = table.find('tbody')
+
+    rows = table_body.find_all('tr')
+
+    for row in rows:
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        if cols :   # on élmine les premières lignes non utiles et vides du tableau
+            data.append(cols)
+
+    # accumulation des données de chaque ligne et colonne dans une chaîne de caractère
+    max_rows=len(data)
+    max_cols=19
+    chaine = ""
+    #print("max_rows : {}".format(max_rows))    
+    
+    for count_rows in range(max_rows) :        
+        for count_cols in range(max_cols) :
+            if data[count_rows][count_cols] :
+                if count_cols :
+                    chaine=chaine+';'+data[count_rows][count_cols]
+                else :
+                    chaine=chaine+data[count_rows][count_cols]
+            else :
+                chaine = chaine +';'                
+        chaine = chaine +'\n'
+    
+    # concaténation de l'entête avec la chaine de données
+    chaine_donnees=chaine_donnees+chaine
+    
+    return chaine_donnees
+
+
 def collecte_region_millesime(nom_vignoble,annee_millesime) :
     """Scraping de toute la page web d'une région pour un millesime donnée"""
     
@@ -208,7 +264,11 @@ def collecte_tableau_commune(nom_region_viticole,rang_region_tableau) :
     return chaine
 
 
-data_vignoble=collecte_france(1996, 2013)
-sauvegarde_fichier_donnees('data_france_viticole.csv', data_vignoble)
-print("Fin du traitement de collecte de données")
+#data_vignoble=collecte_france(1996, 2013)
+#sauvegarde_fichier_donnees('data_france_viticole.csv', data_vignoble)
+#print("Fin du traitement de collecte de données")
+#print(data_vignoble)
+
+#collecte_moyenne_millesime()
+#sauvegarde_fichier_donnees('Scraping_data_france_viticole_moyenne_20190202.csv', data_vignoble)
 #print(data_vignoble)
